@@ -1,14 +1,12 @@
-package com.openai.mydataagent.adaptor.`in`.restapi
+package com.openai.mydataagent.adapter.`in`.restapi
 
-import com.openai.mydataagent.adaptor.`in`.restapi.response.ErrorCodeEnum
-import com.openai.mydataagent.adaptor.`in`.restapi.response.OpenAIResponse
+import com.openai.mydataagent.adapter.`in`.restapi.response.ErrorCodeEnum
+import com.openai.mydataagent.adapter.`in`.restapi.response.OpenAIResponse
 import com.openai.mydataagent.application.port.`in`.QuestionCommand
 import com.openai.mydataagent.application.port.`in`.QuestionUseCase
-import com.openai.mydataagent.application.port.out.ChattingRoom
 import com.openai.mydataagent.application.port.out.ChattingRoomListResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import java.time.Instant
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping

@@ -1,4 +1,4 @@
-package com.openai.mydataagent.adaptor.`in`.restapi.response
+package com.openai.mydataagent.adapter.`in`.restapi.response
 
 data class OpenAIResponse<T> (
     val errorCode: ErrorCodeEnum,

@@ -1,11 +1,11 @@
-package com.openai.mydataagent.adaptor.controller
+package com.openai.mydataagent.adapter.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.openai.mydataagent.adaptor.`in`.restapi.OpenAIController
-import com.openai.mydataagent.adaptor.`in`.restapi.response.ErrorCodeEnum
-import com.openai.mydataagent.adaptor.`in`.restapi.response.OpenAIResponse
+import com.openai.mydataagent.adapter.`in`.restapi.OpenAIController
+import com.openai.mydataagent.adapter.`in`.restapi.response.ErrorCodeEnum
+import com.openai.mydataagent.adapter.`in`.restapi.response.OpenAIResponse
 import com.openai.mydataagent.application.port.`in`.QuestionCommand
 import com.openai.mydataagent.application.port.`in`.QuestionUseCase
 import com.openai.mydataagent.application.port.out.ChattingRoom
