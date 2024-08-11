@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: mydataagent
+
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        web: DEBUG
