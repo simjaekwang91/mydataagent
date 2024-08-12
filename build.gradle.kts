@@ -26,13 +26,19 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webflux-api:$swaggerSpringDocVersion")
     implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:$swaggerSpringDocVersion")
     implementation("org.springdoc:springdoc-openapi-starter-common:$swaggerSpringDocVersion")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springframework.data:spring-data-redis")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    implementation("it.ozimov:embedded-redis:0.7.2")
+    implementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.5.3")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("org.mockito:mockito-core:4.0.0")
     testImplementation("org.mockito:mockito-inline:4.0.0")
-
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
 }
 
 kotlin {

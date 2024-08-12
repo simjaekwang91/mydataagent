@@ -31,8 +31,9 @@ class OpenAIController(private val questionUseCase: QuestionUseCase) {
 
     @Operation(summary = "질의응답")
     @PostMapping("request-question")
-    fun requestQuestion(@RequestBody request: QuestionCommand): OpenAIResponse<String> {
-        return OpenAIResponse(ErrorCodeEnum.Success, "response")
+    fun requestQuestion(@RequestBody request: QuestionCommand): OpenAIResponse<String?> {
+
+        return OpenAIResponse(ErrorCodeEnum.Success, questionUseCase.requestQuestion(request))
     }
 
 }
