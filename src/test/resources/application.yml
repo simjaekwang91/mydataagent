@@ -1,3 +1,10 @@
 spring:
   application:
     name: mydataagent
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  ai:
+    openai:
+      api-key: sk-svcacct-85n-0-KfU17Tp4nkGi33YNbPhN8DrHVvAm-VBM0A8c-2MzT3BlbkFJliZ7-nAtcvkfbCQJmpH01omb5Io2c_Udh9e8pWtjm-0QoA
