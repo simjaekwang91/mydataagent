@@ -8,6 +8,16 @@ spring:
   ai:
     openai:
       api-key: ${OPENAI_API_KEY}
+      embedding:
+        enabled: true
+        options:
+          model: text-embedding-ada-002
+
+    vectorstore:
+      weaviate:
+        host: izfbxjnisyzzpqnai62w.c0.asia-southeast1.gcp.weaviate.cloud
+        api-key: AVm6AIvYXFDUJMQYK8pLRsSC4sQ0hEqlxCv0
+        scheme: https
 
 logging:
   level:

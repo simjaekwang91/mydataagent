@@ -20,17 +20,19 @@ repositories {
     mavenCentral()
     maven { url = uri("https://repo.spring.io/milestone") }
     maven { url = uri("https://repo.spring.io/snapshot") }
+    maven { url = uri("https://jitpack.io") }
+
 }
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.ai:spring-ai-openai-spring-boot-starter:0.8.0-SNAPSHOT")
-
-//    implementation(platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT"))
-//    implementation("org.springframework.ai:spring-ai-openai")
+    implementation("org.springframework.ai:spring-ai-weaviate-store-spring-boot-starter:1.0.0-SNAPSHOT")
+    implementation("org.springframework.cloud:spring-cloud-function-context:4.0.5")
+    implementation("org.springframework.ai:spring-ai-openai-spring-boot-starter:1.0.0-SNAPSHOT")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.springdoc:springdoc-openapi-starter-webflux-api:$swaggerSpringDocVersion")
-    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:$swaggerSpringDocVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:$swaggerSpringDocVersion")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$swaggerSpringDocVersion")
     implementation("org.springdoc:springdoc-openapi-starter-common:$swaggerSpringDocVersion")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.data:spring-data-redis")
@@ -38,6 +40,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("it.ozimov:embedded-redis:0.7.2")
     implementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.5.3")
+    implementation("com.github.shin285:KOMORAN:3.3.9")
+    implementation("org.apache.opennlp:opennlp-tools:2.0.0")
+    implementation("org.apache.opennlp:opennlp-uima:2.0.0")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
