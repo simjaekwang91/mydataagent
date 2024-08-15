@@ -1,8 +1,8 @@
-package com.openai.mydataagent.application.port.out
+package com.openai.mydataagent.domain
 
 import java.time.Instant
 
-data class ChattingRoomListResponseCommand(
+data class ChattingRoomListDomainDto(
     val chattingRoomList: List<ChattingRoom>,
 )
 

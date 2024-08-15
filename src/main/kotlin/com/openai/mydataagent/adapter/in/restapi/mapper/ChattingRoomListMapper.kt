@@ -2,16 +2,16 @@ package com.openai.mydataagent.adapter.`in`.restapi.mapper
 
 import com.openai.mydataagent.adapter.`in`.restapi.dto.ChattingRoomDto
 import com.openai.mydataagent.adapter.`in`.restapi.dto.ChattingRoomListResponseDto
-import com.openai.mydataagent.application.port.out.ChattingRoom
-import com.openai.mydataagent.application.port.out.ChattingRoomListResponseCommand
+import com.openai.mydataagent.domain.ChattingRoom
+import com.openai.mydataagent.domain.ChattingRoomListDomainDto
 
 object ChattingRoomListMapper {
-    fun toCommand(command: ChattingRoomListResponseDto): ChattingRoomListResponseCommand {
+    fun toCommand(command: ChattingRoomListResponseDto): ChattingRoomListDomainDto {
         val chattingRoomList = command.chattingRoomList.map { toCommand(it) }
-        return ChattingRoomListResponseCommand(chattingRoomList)
+        return ChattingRoomListDomainDto(chattingRoomList)
     }
 
-    fun fromCommand(dto: ChattingRoomListResponseCommand): ChattingRoomListResponseDto {
+    fun fromCommand(dto: ChattingRoomListDomainDto): ChattingRoomListResponseDto {
         val chattingRoomList = dto.chattingRoomList.map { toDto(it) }
         return ChattingRoomListResponseDto(chattingRoomList)
 

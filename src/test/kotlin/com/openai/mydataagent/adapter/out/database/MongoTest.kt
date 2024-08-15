@@ -1,6 +1,6 @@
 package com.openai.mydataagent.adapter.out.database
 
-import com.openai.mydataagent.adapter.out.database.entity.Conversation
+import com.openai.mydataagent.adapter.out.database.entity.ConversationEntity
 import com.openai.mydataagent.adapter.out.database.entity.ConversationHistoryEntity
 import java.util.UUID
 import org.junit.jupiter.api.Assertions
@@ -18,7 +18,7 @@ class MongoTest {
 
     @BeforeEach
     fun setUp() {
-        val conversation = Conversation("Hello", "Hi")
+        val conversation = ConversationEntity("Hello", "Hi")
         roomId =  UUID.randomUUID().toString()
         val conversationHistory = ConversationHistoryEntity(userId = "user1",
             roomId = roomId,

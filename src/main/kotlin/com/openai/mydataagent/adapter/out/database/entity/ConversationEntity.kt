@@ -9,11 +9,11 @@ data class ConversationHistoryEntity (
     val id: String? = null,
     val userId: String,
     val roomId: String,
-    val conversationList: List<Conversation>
+    val conversationList: List<ConversationEntity>
 
     )
 
-data class Conversation (
+data class ConversationEntity (
     val question: String,
     val response: String,
 )

@@ -1,6 +1,13 @@
 spring:
   application:
     name: mydataagent
+  task:
+    execution:
+      pool:
+        core-size: 10
+        max-size: 100
+        queue-capacity: 500
+      thread-name-prefix: "ConversationExcutor-"
   data:
     redis:
       host: localhost

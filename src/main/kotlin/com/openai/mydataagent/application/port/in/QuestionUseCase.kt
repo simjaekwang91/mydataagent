@@ -1,9 +1,9 @@
 package com.openai.mydataagent.application.port.`in`
 
-import com.openai.mydataagent.application.port.`in`.QuestionCommand
-import com.openai.mydataagent.application.port.out.ChattingRoomListResponseCommand
+import com.openai.mydataagent.domain.ChattingRoomListDomainDto
+import com.openai.mydataagent.domain.QuestionDomainDto
 
 interface QuestionUseCase {
-    fun getChattingRoomList(userId: String) : ChattingRoomListResponseCommand
-    fun requestQuestion(questionCommand: QuestionCommand) : String?
+    fun getChattingRoomList(userId: String) : ChattingRoomListDomainDto
+    fun requestQuestion(questionDomainDto: QuestionDomainDto) : String?
 }

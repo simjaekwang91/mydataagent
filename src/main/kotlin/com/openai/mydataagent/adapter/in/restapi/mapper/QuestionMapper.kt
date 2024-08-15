@@ -1,18 +1,18 @@
 package com.openai.mydataagent.adapter.`in`.restapi.mapper
 
 import com.openai.mydataagent.adapter.`in`.restapi.dto.QuestionRequestDto
-import com.openai.mydataagent.application.port.`in`.QuestionCommand
+import com.openai.mydataagent.domain.QuestionDomainDto
 
 object QuestionMapper {
-    fun toCommand(requestDto: QuestionRequestDto): QuestionCommand {
-        return QuestionCommand(
+    fun toCommand(requestDto: QuestionRequestDto): QuestionDomainDto {
+        return QuestionDomainDto(
             userId = requestDto.userId,
             roomId = requestDto.roomId,
             message = requestDto.message
         )
     }
 
-    fun fromCommand(command: QuestionCommand): QuestionRequestDto {
+    fun fromCommand(command: QuestionDomainDto): QuestionRequestDto {
         return QuestionRequestDto(
             userId = command.userId,
             roomId = command.roomId,

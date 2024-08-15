@@ -8,8 +8,10 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class WeaviateImpl(private val vectorStore: WeaviateVectorStore) : RagPort{
-    override fun findRagByWord(query: String): List<Document> {
-        return vectorStore.similaritySearch(SearchRequest.query(query).withTopK(3))
+    override fun findRagByWord(query: String): List<String> {
+        return vectorStore.similaritySearch(SearchRequest.query(query).withTopK(3)).map {
+            it.content
+        }
     }
 
     override fun savaRagDocument(content: List<String>) {
