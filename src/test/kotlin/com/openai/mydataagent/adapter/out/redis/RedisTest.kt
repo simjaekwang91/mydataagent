@@ -1,4 +1,4 @@
-package com.openai.mydataagent.adapter.redis
+package com.openai.mydataagent.adapter.out.redis
 
 import com.openai.mydataagent.adapter.out.cache.RedisImpl
 import org.junit.jupiter.api.Assertions

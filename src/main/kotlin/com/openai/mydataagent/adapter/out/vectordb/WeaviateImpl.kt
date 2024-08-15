@@ -1,4 +1,4 @@
-package com.openai.mydataagent.adapter.out.vectorDB
+package com.openai.mydataagent.adapter.out.vectordb
 
 import com.openai.mydataagent.application.port.out.RagPort
 import org.springframework.ai.document.Document

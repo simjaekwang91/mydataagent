@@ -1,8 +1,8 @@
 package com.openai.mydataagent.adapter.out.config
 
-import com.openai.mydataagent.adapter.out.Properties.RedisProperties
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.connection.RedisConnectionFactory

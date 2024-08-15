@@ -31,8 +31,8 @@ class QuestionService(private val cacheConversactionPort: CacheConversactionPort
 //        val sections = text.split(Regex("### |\\\\section\\*\\{[^}]*}")).filter { it.isNotBlank() }
 //        val result = splitSectionsByTokenLimit(sections, 4000)
 //        ragPort.savaRagDocument("Test", "content", result)
-        val response = aiPort.getAIResponse("금융이 뭐야")
-        logger.info(response)
+//        val response = aiPort.getAIResponse("금융이 뭐야")
+//        logger.info(response)
     }
 
 //    private final fun splitSectionsByTokenLimit(sections: List<String>, tokenLimit: Int): List<String> {
