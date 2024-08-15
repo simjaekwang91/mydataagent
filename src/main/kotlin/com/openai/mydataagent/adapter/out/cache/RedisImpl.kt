@@ -1,4 +1,4 @@
-package com.openai.mydataagent.adapter.out.redis
+package com.openai.mydataagent.adapter.out.cache
 
 import com.openai.mydataagent.adapter.out.JsonMapper
 import com.openai.mydataagent.application.port.out.CacheConversactionPort

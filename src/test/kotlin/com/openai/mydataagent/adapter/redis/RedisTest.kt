@@ -1,6 +1,6 @@
 package com.openai.mydataagent.adapter.redis
 
-import com.openai.mydataagent.adapter.out.redis.RedisImpl
+import com.openai.mydataagent.adapter.out.cache.RedisImpl
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

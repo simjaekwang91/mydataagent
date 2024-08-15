@@ -4,12 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.openai.mydataagent.adapter.`in`.restapi.OpenAIController
-import com.openai.mydataagent.adapter.`in`.restapi.response.ErrorCodeEnum
-import com.openai.mydataagent.adapter.`in`.restapi.response.OpenAIResponse
+import com.openai.mydataagent.adapter.`in`.restapi.dto.ChattingRoomListResponseDto
+import com.openai.mydataagent.adapter.`in`.restapi.model.ErrorCodeEnum
+import com.openai.mydataagent.adapter.`in`.restapi.model.OpenAIResponse
 import com.openai.mydataagent.application.port.`in`.QuestionCommand
 import com.openai.mydataagent.application.port.`in`.QuestionUseCase
 import com.openai.mydataagent.application.port.out.ChattingRoom
-import com.openai.mydataagent.application.port.out.ChattingRoomListResponse
+import com.openai.mydataagent.application.port.out.ChattingRoomListResponseCommand
 import java.time.Instant
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -39,12 +40,14 @@ class OpenAIControllerTest {
     @BeforeEach
     fun setUp() {
         objectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
-        `when`(questionUseCase.requestQuestion(QuestionCommand("1", "hi"))).thenReturn(
+        `when`(questionUseCase.requestQuestion(QuestionCommand("user1","1", "hi"))).thenReturn(
             "hello"
         )
         `when`(questionUseCase.getChattingRoomList("1")).thenReturn(
-            ChattingRoomListResponse(mutableListOf(ChattingRoom("1","2", Instant.now(), Instant.now()),
-                ChattingRoom("2","3", Instant.now(), Instant.now())))
+            ChattingRoomListResponseCommand(mutableListOf(
+                ChattingRoom("1","2", Instant.now(), Instant.now()),
+                ChattingRoom("2","3", Instant.now(), Instant.now())
+            ))
         )
     }
 
@@ -61,7 +64,7 @@ class OpenAIControllerTest {
         // JSON 응답을 객체로 변환 (OpenAIResponse<ChattingRoomListResponseDto> 타입으로 변환)
         val apiResponse = objectMapper.readValue(
             contentString,
-            object : com.fasterxml.jackson.core.type.TypeReference<OpenAIResponse<ChattingRoomListResponse>>() {}
+            object : com.fasterxml.jackson.core.type.TypeReference<OpenAIResponse<ChattingRoomListResponseDto>>() {}
         )
 
         // 데이터 필드에 대한 검증

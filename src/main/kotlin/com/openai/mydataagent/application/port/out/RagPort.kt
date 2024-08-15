@@ -1,8 +1,10 @@
 package com.openai.mydataagent.application.port.out
 
-interface RagPort {
-    fun findRagByWord()
+import org.springframework.ai.document.Document
 
-    fun savaRagDocument(className: String, contentName: String, sentences: List<String>)
+interface RagPort {
+    fun findRagByWord(query: String):List<Document>
+
+    fun savaRagDocument(content: List<String>)
 
 }

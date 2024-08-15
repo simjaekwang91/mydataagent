@@ -2,7 +2,7 @@ package com.openai.mydataagent.application.port.out
 
 import java.time.Instant
 
-data class ChattingRoomListResponse(
+data class ChattingRoomListResponseCommand(
     val chattingRoomList: List<ChattingRoom>,
 )
 
