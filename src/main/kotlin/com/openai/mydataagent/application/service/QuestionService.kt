@@ -60,10 +60,10 @@ class QuestionService(
         // 질문 준비
         val questions = prepareQuestions(questionDomainDto, cacheHistory, 8076)
 
-        // AI로 질문을 전송하고 응답을 받음
+        // open ai api 호출
         val aiMessage = aiPort.getAIResponse(questions, isFirstQuestion)
 
-        // 대화 기록 저장
+        // 대화 내용 캐시 및 DB 저장 멀티 스레드 호출
         setHistoryAsync(cacheKey, questionDomainDto, aiMessage)
 
         return aiMessage
@@ -77,12 +77,12 @@ class QuestionService(
             questions.add(index, "[이전 대화 내용] 질문:${value.question} 답변:${value.response}")
         }
 
-        // 검색 결과 추가
+        // vectorDB 검색 결과
         ragPort.searchSimilarVectors(questionDomainDto.message).forEach {
             questions.add("[참고 데이터] $it")
         }
 
-        // 질문 내용 추가
+        // ai 질문 추가
         questions.add(
             "위 검색된 내용을 바탕으로 '${questionDomainDto.message}' 이 질문 내용에 가장 적합한 답을 찾아줘. " +
                     "검색된 내용은 [참고 데이터] prefix 붙어있어. " +
@@ -115,6 +115,13 @@ class QuestionService(
         return CompletableFuture.allOf(setCacheDataFuture, setTotalConversationFuture)
     }
 
+    /**
+     * 최근 10개 대화 캐싱
+     *
+     * @param key
+     * @param questionDomainDto
+     * @param responseMessage
+     */
     fun setCacheData(key: String, questionDomainDto: QuestionDomainDto, responseMessage: String) {
         val currentConversationDto = ConversationDto(questionDomainDto.message, responseMessage, Instant.now())
 
@@ -137,6 +144,12 @@ class QuestionService(
         )
     }
 
+    /**
+     * 전체 대화 내역 저장
+     *
+     * @param questionDomainDto
+     * @param responseMessage
+     */
     fun setTotalConversation(questionDomainDto: QuestionDomainDto, responseMessage: String) {
         val currentConversationDto = ConversationDto(questionDomainDto.message, responseMessage, Instant.now())
 
@@ -154,6 +167,18 @@ class QuestionService(
         )
     }
 
+    /**
+     * 캐싱 및 DB 저장이 중복 코드가 많아 공통화
+     *
+     * @param getHistory 캐시 및 DB에서 대화 내역 가져오는 함수
+     * @param updateHistory 캐시 및 DB에 대화 내역 저장 함수
+     * @param createNewHistory 신규 대화 내역
+     * @param currentConversationDto 신규 대화 상세 내역
+     * @param preUpdateAction 작업 전 수행할 함수
+     * @receiver
+     * @receiver
+     * @receiver
+     */
     fun handleConversationHistory(
         getHistory: () -> ConversationHistoryDto?,
         updateHistory: (ConversationHistoryDto) -> Unit,

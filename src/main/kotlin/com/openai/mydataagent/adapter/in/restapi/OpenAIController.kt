@@ -21,9 +21,15 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/v1/openai")
 class OpenAIController(private val questionUseCase: QuestionUseCase) {
 
+    /**
+     * 전체 대화 내역 조회
+     *
+     * @param userId
+     * @return
+     */
     @Operation(summary = "전체 대화 내역")
     @GetMapping("conversation/all/{userid}")
-    fun getChattingRoomList(@PathVariable("userid") userId: String,): OpenAIResponse<List<ConversationHistoryResponseDto>?> {
+    fun getAllConversation(@PathVariable("userid") userId: String,): OpenAIResponse<List<ConversationHistoryResponseDto>?> {
         return try {
             val list = questionUseCase.getAllConversationList(userId)?.map {
                 ConversationHistoryMapper.fromDto(it)
@@ -34,10 +40,19 @@ class OpenAIController(private val questionUseCase: QuestionUseCase) {
         }
     }
 
+    /**
+     * 마이데이터 에이전트 질의 응답
+     *
+     * @param request
+     * @return
+     */
     @Operation(summary = "마이데이터 에이전트 질의 응답")
     @PostMapping("request-question")
     fun requestQuestion(@RequestBody request: QuestionRequestDto): OpenAIResponse<String?> {
-
-        return OpenAIResponse(ErrorCodeEnum.Success, questionUseCase.requestQuestion(QuestionMapper.toCommand(request)))
+        return try {
+            OpenAIResponse(ErrorCodeEnum.Success, questionUseCase.requestQuestion(QuestionMapper.toCommand(request)))
+        } catch (e: Exception){
+            OpenAIResponse(ErrorCodeEnum.InternalError, null)
+        }
     }
 }
