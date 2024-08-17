@@ -43,7 +43,7 @@ class OpenAIControllerTest {
         `when`(questionUseCase.requestQuestion(QuestionDomainDto("user1","1", "hi"))).thenReturn(
             "hello"
         )
-        `when`(questionUseCase.getChattingRoomList("1")).thenReturn(
+        `when`(questionUseCase.getAllConversationList("1")).thenReturn(
             ChattingRoomListDomainDto(mutableListOf(
                 ChattingRoom("1","2", Instant.now(), Instant.now()),
                 ChattingRoom("2","3", Instant.now(), Instant.now())

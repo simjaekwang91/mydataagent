@@ -1,8 +1,8 @@
 package com.openai.mydataagent.adapter.`in`.restapi
 
-import com.openai.mydataagent.adapter.`in`.restapi.dto.ChattingRoomListResponseDto
+import com.openai.mydataagent.adapter.`in`.restapi.dto.ConversationHistoryResponseDto
 import com.openai.mydataagent.adapter.`in`.restapi.dto.QuestionRequestDto
-import com.openai.mydataagent.adapter.`in`.restapi.mapper.ChattingRoomListMapper
+import com.openai.mydataagent.adapter.`in`.restapi.mapper.ConversationHistoryMapper
 import com.openai.mydataagent.adapter.`in`.restapi.mapper.QuestionMapper
 import com.openai.mydataagent.adapter.`in`.restapi.model.ErrorCodeEnum
 import com.openai.mydataagent.adapter.`in`.restapi.model.OpenAIResponse
@@ -21,22 +21,23 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/v1/openai")
 class OpenAIController(private val questionUseCase: QuestionUseCase) {
 
-    @Operation(summary = "채팅방 리스트")
+    @Operation(summary = "전체 대화 내역")
     @GetMapping("getchatlist/{userid}")
-    fun getChattingRoomList(@PathVariable("userid") userId: String,): OpenAIResponse<ChattingRoomListResponseDto?> {
+    fun getChattingRoomList(@PathVariable("userid") userId: String,): OpenAIResponse<List<ConversationHistoryResponseDto>?> {
         return try {
-            val list = ChattingRoomListMapper.fromCommand(questionUseCase.getChattingRoomList(userId))
+            val list = questionUseCase.getAllConversationList(userId)?.map {
+                ConversationHistoryMapper.fromDto(it)
+            }
             OpenAIResponse(ErrorCodeEnum.Success, list)
         } catch (e: Exception) {
             OpenAIResponse(ErrorCodeEnum.InternalError, null)
         }
     }
 
-    @Operation(summary = "질의응답")
+    @Operation(summary = "마이데이터 에이전트 질의 응답")
     @PostMapping("request-question")
     fun requestQuestion(@RequestBody request: QuestionRequestDto): OpenAIResponse<String?> {
 
         return OpenAIResponse(ErrorCodeEnum.Success, questionUseCase.requestQuestion(QuestionMapper.toCommand(request)))
     }
-
 }

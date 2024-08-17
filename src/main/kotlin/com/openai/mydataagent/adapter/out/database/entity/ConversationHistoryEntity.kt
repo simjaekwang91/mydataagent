@@ -1,5 +1,6 @@
 package com.openai.mydataagent.adapter.out.database.entity
 
+import java.time.Instant
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
@@ -10,10 +11,10 @@ data class ConversationHistoryEntity (
     val userId: String,
     val roomId: String,
     val conversationList: List<ConversationEntity>
-
     )
 
 data class ConversationEntity (
     val question: String,
     val response: String,
+    val createTime: Instant
 )

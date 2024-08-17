@@ -1,9 +1,9 @@
 package com.openai.mydataagent.application.port.`in`
 
-import com.openai.mydataagent.domain.ChattingRoomListDomainDto
+import com.openai.mydataagent.domain.ConversationHistoryDto
 import com.openai.mydataagent.domain.QuestionDomainDto
 
 interface QuestionUseCase {
-    fun getChattingRoomList(userId: String) : ChattingRoomListDomainDto
+    fun getAllConversationList(userId: String) : List<ConversationHistoryDto>?
     fun requestQuestion(questionDomainDto: QuestionDomainDto) : String?
 }

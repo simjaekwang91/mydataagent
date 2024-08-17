@@ -8,9 +8,14 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class MongoImpl(private val conversationRepository: ConversationRepository): ConversationHistoryPort {
+    override fun getAllConversationList(userId: String): List<ConversationHistoryDto>? {
+        return conversationRepository.findByUserId(userId).takeIf { it.isNotEmpty() }?.map {
+            ConversationHistoryMapper.toDto(it)
+        }
+    }
 
-    override fun getConversationList(userId: String, roomId: String): List<ConversationHistoryDto> {
-        return conversationRepository.findByUserIdAndRoomId(userId, roomId).map {
+    override fun getConversationList(userId: String, roomId: String): ConversationHistoryDto? {
+        return conversationRepository.findByUserIdAndRoomId(userId, roomId).firstOrNull()?.let {
             ConversationHistoryMapper.toDto(it)
         }
     }

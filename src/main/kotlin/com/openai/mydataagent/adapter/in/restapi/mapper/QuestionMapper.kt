@@ -7,7 +7,7 @@ object QuestionMapper {
     fun toCommand(requestDto: QuestionRequestDto): QuestionDomainDto {
         return QuestionDomainDto(
             userId = requestDto.userId,
-            roomId = requestDto.roomId,
+            roomId = requestDto.roomId ?: "",
             message = requestDto.message
         )
     }
