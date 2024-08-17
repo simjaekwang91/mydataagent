@@ -4,13 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.openai.mydataagent.adapter.`in`.restapi.OpenAIController
-import com.openai.mydataagent.adapter.`in`.restapi.dto.ChattingRoomListResponseDto
+import com.openai.mydataagent.adapter.`in`.restapi.dto.ConversationHistoryResponseDto
+import com.openai.mydataagent.adapter.`in`.restapi.dto.ConversationResponseDto
 import com.openai.mydataagent.adapter.`in`.restapi.model.ErrorCodeEnum
 import com.openai.mydataagent.adapter.`in`.restapi.model.OpenAIResponse
 import com.openai.mydataagent.domain.QuestionDomainDto
 import com.openai.mydataagent.application.port.`in`.QuestionUseCase
-import com.openai.mydataagent.domain.ChattingRoom
-import com.openai.mydataagent.domain.ChattingRoomListDomainDto
+import com.openai.mydataagent.domain.ConversationDto
+import com.openai.mydataagent.domain.ConversationHistoryDto
 import java.time.Instant
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -43,18 +44,22 @@ class OpenAIControllerTest {
         `when`(questionUseCase.requestQuestion(QuestionDomainDto("user1","1", "hi"))).thenReturn(
             "hello"
         )
-        `when`(questionUseCase.getAllConversationList("1")).thenReturn(
-            ChattingRoomListDomainDto(mutableListOf(
-                ChattingRoom("1","2", Instant.now(), Instant.now()),
-                ChattingRoom("2","3", Instant.now(), Instant.now())
-            ))
+        `when`(questionUseCase.getAllConversationList("user1")).thenReturn(
+            listOf(ConversationHistoryDto(
+                null,
+                "user1",
+                "room1",
+                mutableListOf(
+                ConversationDto("hello","hi", Instant.now()),
+                ConversationDto("hello2","hi2", Instant.now())
+            )))
         )
     }
 
     @Test
-    fun getChattingRoomSuccessTest() {
+    fun getAllConversationSuccessTest() {
         val result = mockMvc.perform(
-            MockMvcRequestBuilders.get("/v1/openai/getchatlist/1")
+            MockMvcRequestBuilders.get("/v1/openai/conversation/all/user1")
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(MockMvcResultMatchers.status().isOk).andReturn()
@@ -64,14 +69,18 @@ class OpenAIControllerTest {
         // JSON 응답을 객체로 변환 (OpenAIResponse<ChattingRoomListResponseDto> 타입으로 변환)
         val apiResponse = objectMapper.readValue(
             contentString,
-            object : com.fasterxml.jackson.core.type.TypeReference<OpenAIResponse<ChattingRoomListResponseDto>>() {}
+            object : com.fasterxml.jackson.core.type.TypeReference<OpenAIResponse<List<ConversationHistoryResponseDto>>>() {}
         )
 
         // 데이터 필드에 대한 검증
-        Assertions.assertNotNull(apiResponse.data, "Data should not be null")
+        Assertions.assertNotNull(apiResponse.data, "데이터 null")
         Assertions.assertEquals(ErrorCodeEnum.Success, apiResponse.errorCode)
-        Assertions.assertEquals(2, apiResponse.data.chattingRoomList.size)
-        Assertions.assertEquals("1", apiResponse.data.chattingRoomList[0].roomId)
-        Assertions.assertEquals("2", apiResponse.data.chattingRoomList[0].title)
+        Assertions.assertEquals(1, apiResponse.data.size)
+        Assertions.assertEquals("user1", apiResponse.data.first().userId)
+        Assertions.assertEquals("room1", apiResponse.data.first().roomId)
+
+        Assertions.assertEquals(2, apiResponse.data.first().conversationList.count())
+        Assertions.assertEquals("hello", apiResponse.data.first().conversationList.first().question)
+        Assertions.assertEquals("hi", apiResponse.data.first().conversationList.first().response)
     }
 }

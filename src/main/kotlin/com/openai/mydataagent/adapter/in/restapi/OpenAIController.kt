@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController
 class OpenAIController(private val questionUseCase: QuestionUseCase) {
 
     @Operation(summary = "전체 대화 내역")
-    @GetMapping("getchatlist/{userid}")
+    @GetMapping("conversation/all/{userid}")
     fun getChattingRoomList(@PathVariable("userid") userId: String,): OpenAIResponse<List<ConversationHistoryResponseDto>?> {
         return try {
             val list = questionUseCase.getAllConversationList(userId)?.map {

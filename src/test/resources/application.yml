@@ -26,7 +26,7 @@ spring:
     vectorstore:
       weaviate:
         host: izfbxjnisyzzpqnai62w.c0.asia-southeast1.gcp.weaviate.cloud
-        api-key: AVm6AIvYXFDUJMQYK8pLRsSC4sQ0hEqlxCv0
+        api-key: NYaT4rRYza5UND1ESBCrmsOxcSN8yZfKA9PC
         scheme: https
         object-class: "TechnicalGuideline"
         consistency-level: one

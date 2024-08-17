@@ -8,6 +8,9 @@ data class OpenAIResponse<T> (
 
 enum class ErrorCodeEnum(val code: Int) {
     Success(0),
+    OpenAIError(6000),
+    MongoError(7000),
+    RedisError(8000),
     InternalError (9999)
 }
 

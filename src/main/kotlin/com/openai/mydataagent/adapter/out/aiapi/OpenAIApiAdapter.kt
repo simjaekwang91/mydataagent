@@ -1,5 +1,7 @@
 package com.openai.mydataagent.adapter.out.aiapi
 
+import com.openai.mydataagent.adapter.`in`.restapi.exception.OpenAICustomException
+import com.openai.mydataagent.adapter.`in`.restapi.model.ErrorCodeEnum
 import com.openai.mydataagent.application.port.out.AIPort
 import org.springframework.ai.chat.messages.Message
 import org.springframework.ai.chat.messages.SystemMessage
@@ -8,9 +10,10 @@ import org.springframework.ai.openai.OpenAiChatModel
 import org.springframework.stereotype.Service
 
 @Service
-class OpenAIApiImpl(private val openAiChatModel: OpenAiChatModel): AIPort {
+class OpenAIApiAdapter(private val openAiChatModel: OpenAiChatModel): AIPort {
     override fun getAIResponse(query: List<String>, isFistMessage: Boolean): String {
         return try {
+            require(query.isNotEmpty()) { "질문은 비어있을 수 없습니다." }
             val promptMessage = mutableListOf<Message>()
             if(isFistMessage) {
                 promptMessage.add(SystemMessage("너는 금융권의 질의 응답자야"))
@@ -26,7 +29,7 @@ class OpenAIApiImpl(private val openAiChatModel: OpenAiChatModel): AIPort {
 
             openAiChatModel.call(messageList).result.output.content
         } catch (e: Exception){
-            throw e
+            throw OpenAICustomException(ErrorCodeEnum.OpenAIError, e.cause, e.message)
         }
     }
 }

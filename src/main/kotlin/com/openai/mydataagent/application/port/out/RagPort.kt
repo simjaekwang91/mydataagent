@@ -1,9 +1,7 @@
 package com.openai.mydataagent.application.port.out
 
-import org.springframework.ai.document.Document
-
 interface RagPort {
-    fun findRagByWord(query: String):List<String>
+    fun searchSimilarVectors(query: String):List<String>
 
     fun savaRagDocument(content: List<String>)
 

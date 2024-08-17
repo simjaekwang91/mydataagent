@@ -9,7 +9,6 @@ import com.openai.mydataagent.domain.ConversationDto
 import com.openai.mydataagent.domain.ConversationHistoryDto
 import com.openai.mydataagent.domain.QuestionDomainDto
 import java.time.Instant
-import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import org.slf4j.LoggerFactory
@@ -61,7 +60,7 @@ class QuestionService(
         val questions = prepareQuestions(questionDomainDto, cacheHistory, 8076)
 
         // AI로 질문을 전송하고 응답을 받음
-        val aiMessage = aiPort.getAIResponse(questions, true)
+        val aiMessage = aiPort.getAIResponse(questions, isFirstQuestion)
 
         // 대화 기록 저장 (비동기)
         setHistoryAsync(cacheKey, questionDomainDto, aiMessage)
@@ -78,7 +77,7 @@ class QuestionService(
         }
 
         // RAG 검색 결과 추가
-        ragPort.findRagByWord(questionDomainDto.message).forEach {
+        ragPort.searchSimilarVectors(questionDomainDto.message).forEach {
             questions.add("[참고 데이터] $it")
         }
 
