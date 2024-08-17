@@ -2,13 +2,14 @@ package com.openai.mydataagent.application.service
 
 import com.openai.mydataagent.application.port.`in`.QuestionUseCase
 import com.openai.mydataagent.application.port.out.AIPort
-import com.openai.mydataagent.application.port.out.CacheConversactionPort
+import com.openai.mydataagent.application.port.out.CacheConversationPort
 import com.openai.mydataagent.application.port.out.ConversationHistoryPort
 import com.openai.mydataagent.application.port.out.RagPort
 import com.openai.mydataagent.domain.ConversationDto
 import com.openai.mydataagent.domain.ConversationHistoryDto
 import com.openai.mydataagent.domain.QuestionDomainDto
 import java.time.Instant
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import org.slf4j.LoggerFactory
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Service
  */
 @Service
 class QuestionService(
-    private val cacheConversationPort: CacheConversactionPort,
+    private val cacheConversationPort: CacheConversationPort,
     private val ragPort: RagPort,
     private val aiPort: AIPort,
     private val conversationPort: ConversationHistoryPort
@@ -54,7 +55,7 @@ class QuestionService(
         val cacheKey = "${questionDomainDto.userId}:${questionDomainDto.roomId}"
 
         val cacheHistory = if (isFirstQuestion) null else
-            cacheConversationPort.getCacheData("", ConversationHistoryDto::class.java)
+            cacheConversationPort.getCacheData(cacheKey, ConversationHistoryDto::class.java)
 
         // 질문 준비
         val questions = prepareQuestions(questionDomainDto, cacheHistory, 8076)
@@ -62,7 +63,7 @@ class QuestionService(
         // AI로 질문을 전송하고 응답을 받음
         val aiMessage = aiPort.getAIResponse(questions, isFirstQuestion)
 
-        // 대화 기록 저장 (비동기)
+        // 대화 기록 저장
         setHistoryAsync(cacheKey, questionDomainDto, aiMessage)
 
         return aiMessage
@@ -73,10 +74,10 @@ class QuestionService(
 
         // 이전 대화 내용을 추가 (토큰 수를 초과하지 않도록 제한)
         cacheHistory?.conversationList?.forEachIndexed { index, value ->
-            questions.add(index, "[이전 대화 내용] ${value.question}")
+            questions.add(index, "[이전 대화 내용] 질문:${value.question} 답변:${value.response}")
         }
 
-        // RAG 검색 결과 추가
+        // 검색 결과 추가
         ragPort.searchSimilarVectors(questionDomainDto.message).forEach {
             questions.add("[참고 데이터] $it")
         }
@@ -89,7 +90,7 @@ class QuestionService(
                     "니가 판단할때 질문 내용이 검색을 뜻하는게 아니라면 자유롭게 답변해."
         )
 
-        // 토큰 제한을 초과하지 않도록 잘라냄
+        // 토큰 제한을 초과하지 않도록 제한
         while (calculateTokenCount(questions.joinToString(" ")) > maxTokens && questions.isNotEmpty()) {
             questions.removeAt(0)  // 가장 앞쪽부터 삭제
         }
@@ -98,15 +99,20 @@ class QuestionService(
     }
 
     fun calculateTokenCount(text: String): Int {
-        // 텍스트에서 공백을 포함한 전체 길이를 기준으로 대략적인 토큰 수를 계산합니다.
-        return text.length / 3 // 한국어에서 대략 3글자에 1 토큰으로 계산
+        // 텍스트에서 공백을 포함한 전체 길이를 기준으로 대략적인 토큰 수를 계산
+        return text.length / 3 // 한국어에서 대략 3글자에 1 토큰
     }
 
-    fun setHistoryAsync(key: String, questionDomainDto: QuestionDomainDto, responseMessage: String) {
-        executorService.submit {
+    fun setHistoryAsync(key: String, questionDomainDto: QuestionDomainDto, responseMessage: String): CompletableFuture<Void> {
+        val setCacheDataFuture = CompletableFuture.runAsync({
             setCacheData(key, questionDomainDto, responseMessage)
+        }, executorService)
+
+        val setTotalConversationFuture = CompletableFuture.runAsync({
             setTotalConversation(questionDomainDto, responseMessage)
-        }.get()
+        }, executorService)
+
+        return CompletableFuture.allOf(setCacheDataFuture, setTotalConversationFuture)
     }
 
     fun setCacheData(key: String, questionDomainDto: QuestionDomainDto, responseMessage: String) {
@@ -148,7 +154,7 @@ class QuestionService(
         )
     }
 
-    private fun handleConversationHistory(
+    fun handleConversationHistory(
         getHistory: () -> ConversationHistoryDto?,
         updateHistory: (ConversationHistoryDto) -> Unit,
         createNewHistory: () -> ConversationHistoryDto,

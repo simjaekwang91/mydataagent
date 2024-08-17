@@ -3,12 +3,12 @@ package com.openai.mydataagent.adapter.out.cache
 import com.openai.mydataagent.adapter.`in`.restapi.exception.RedisCustomException
 import com.openai.mydataagent.adapter.`in`.restapi.model.ErrorCodeEnum
 import com.openai.mydataagent.adapter.out.JsonMapper
-import com.openai.mydataagent.application.port.out.CacheConversactionPort
+import com.openai.mydataagent.application.port.out.CacheConversationPort
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
-class RedisAdapter(private val redisTemplate: RedisTemplate<String, String>): CacheConversactionPort {
+class RedisAdapter(private val redisTemplate: RedisTemplate<String, String>): CacheConversationPort {
 
     override fun <T> setCacheData(key: String, data: T) {
         try {
