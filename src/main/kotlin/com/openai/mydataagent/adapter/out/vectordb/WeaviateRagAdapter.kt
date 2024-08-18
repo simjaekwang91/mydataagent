@@ -6,10 +6,17 @@ import org.springframework.ai.vectorstore.SearchRequest
 import org.springframework.ai.vectorstore.WeaviateVectorStore
 import org.springframework.stereotype.Repository
 
+/**
+ * Weaviate rag adapter
+ * PDF VectorDB 저장
+ *
+ * @property vectorStore
+ * @constructor Create empty Weaviate rag adapter
+ */
 @Repository
 class WeaviateRagAdapter(private val vectorStore: WeaviateVectorStore) : RagPort{
     override fun searchSimilarVectors(query: String): List<String> {
-        return vectorStore.similaritySearch(SearchRequest.query(query).withTopK(5)).map {
+        return vectorStore.similaritySearch(SearchRequest.query(query).withTopK(7)).map {
             it.content
         }
     }

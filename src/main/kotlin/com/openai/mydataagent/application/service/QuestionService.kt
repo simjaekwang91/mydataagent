@@ -12,6 +12,9 @@ import java.time.Instant
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL
+import kr.co.shineware.nlp.komoran.core.Komoran
+import kr.co.shineware.nlp.komoran.model.KomoranResult
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
@@ -77,7 +80,6 @@ class QuestionService(
             questions.add(index, "[이전 대화 내용] 질문:${value.question} 답변:${value.response}")
         }
 
-        // vectorDB 검색 결과
         ragPort.searchSimilarVectors(questionDomainDto.message).forEach {
             questions.add("[참고 데이터] $it")
         }
@@ -85,24 +87,31 @@ class QuestionService(
         // ai 질문 추가
         questions.add(
             "위 검색된 내용을 바탕으로 '${questionDomainDto.message}' 이 질문 내용에 가장 적합한 답을 찾아줘. " +
-                    "검색된 내용은 [참고 데이터] prefix 붙어있어. " +
-                    "마크 다운 문자열은 제거하고 줘. " +
+                    "검색된 내용은 [참고 데이터] prefix 붙어있고 [이전 대화 내용]은 너랑 이야기 했던 대화 내용이야" +
+                    "마크 다운 문자열은 제거하고" +
                     "니가 판단할때 질문 내용이 검색을 뜻하는게 아니라면 자유롭게 답변해."
         )
 
         // 토큰 제한을 초과하지 않도록 제한
         while (calculateTokenCount(questions.joinToString(" ")) > maxTokens && questions.isNotEmpty()) {
-            questions.removeAt(0)  // 가장 앞쪽부터 삭제
+            questions.removeAt(0)  // 가장 이전 대화 내역 먼저 삭제
         }
 
         return questions
     }
 
     fun calculateTokenCount(text: String): Int {
-        // 텍스트에서 공백을 포함한 전체 길이를 기준으로 대략적인 토큰 수를 계산
-        return text.length / 3 // 한국어에서 대략 3글자에 1 토큰
+        return text.length / 3 // 한국어 이기 때문에 대략 3글자에 1 토큰으로 계산했음
     }
 
+    /**
+     * 대화내역 캐시(최근 10개) 및 전체 대화내역 저장
+     *
+     * @param key
+     * @param questionDomainDto
+     * @param responseMessage
+     * @return
+     */
     fun setHistoryAsync(key: String, questionDomainDto: QuestionDomainDto, responseMessage: String): CompletableFuture<Void> {
         val setCacheDataFuture = CompletableFuture.runAsync({
             setCacheData(key, questionDomainDto, responseMessage)

@@ -7,6 +7,12 @@ import com.openai.mydataagent.application.port.out.ConversationHistoryPort
 import com.openai.mydataagent.domain.ConversationHistoryDto
 import org.springframework.stereotype.Repository
 
+/**
+ * Mongo adapter
+ * 전체 대화내역 저장
+ * @property conversationRepository
+ * @constructor Create empty Mongo adapter
+ */
 @Repository
 class MongoAdapter(private val conversationRepository: ConversationRepository): ConversationHistoryPort {
     override fun getAllConversationList(userId: String): List<ConversationHistoryDto>? {

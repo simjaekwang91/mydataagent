@@ -40,8 +40,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("it.ozimov:embedded-redis:0.7.2")
     implementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.16.1")
-    //implementation ("de.bwaldvogel:mongo-java-server:1.39.0")
-    //implementation ("de.bwaldvogel:mongo-java-server-memory-backend:1.39.0")
     implementation("com.github.shin285:KOMORAN:3.3.9")
     implementation("org.apache.opennlp:opennlp-tools:2.0.0")
     implementation("org.apache.opennlp:opennlp-uima:2.0.0")

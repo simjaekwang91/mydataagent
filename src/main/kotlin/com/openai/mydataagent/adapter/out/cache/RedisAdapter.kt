@@ -7,6 +7,12 @@ import com.openai.mydataagent.application.port.out.CacheConversationPort
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
 
+/**
+ * Redis adapter
+ * 대화 내역 최근 10개 저장
+ * @property redisTemplate
+ * @constructor Create empty Redis adapter
+ */
 @Repository
 class RedisAdapter(private val redisTemplate: RedisTemplate<String, String>): CacheConversationPort {
 

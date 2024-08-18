@@ -36,7 +36,7 @@ class OpenAIController(private val questionUseCase: QuestionUseCase) {
             }
             OpenAIResponse(ErrorCodeEnum.Success, list)
         } catch (e: Exception) {
-            OpenAIResponse(ErrorCodeEnum.InternalError, null)
+            OpenAIResponse(ErrorCodeEnum.InternalError, null, e.toString())
         }
     }
 
@@ -52,7 +52,7 @@ class OpenAIController(private val questionUseCase: QuestionUseCase) {
         return try {
             OpenAIResponse(ErrorCodeEnum.Success, questionUseCase.requestQuestion(QuestionMapper.toCommand(request)))
         } catch (e: Exception){
-            OpenAIResponse(ErrorCodeEnum.InternalError, null)
+            OpenAIResponse(ErrorCodeEnum.InternalError,null, e.toString())
         }
     }
 }

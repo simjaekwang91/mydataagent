@@ -7,6 +7,11 @@ import org.springframework.web.servlet.view.RedirectView
 
 @RestController
 class SwaggerRedirectController {
+    /**
+     * Swagger Redirect Endpoint
+     *
+     * @return
+     */
     @GetMapping("/")
     @Operation(hidden = true)
     fun redirectToSwagger(): RedirectView {

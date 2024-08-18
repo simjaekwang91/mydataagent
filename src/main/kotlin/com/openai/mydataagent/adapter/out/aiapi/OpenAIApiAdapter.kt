@@ -9,6 +9,13 @@ import org.springframework.ai.chat.messages.UserMessage
 import org.springframework.ai.openai.OpenAiChatModel
 import org.springframework.stereotype.Service
 
+/**
+ * Open ai api adapter
+ * system message 설정 및 prompt 설정
+ *
+ * @property openAiChatModel
+ * @constructor Create empty Open a i api adapter
+ */
 @Service
 class OpenAIApiAdapter(private val openAiChatModel: OpenAiChatModel): AIPort {
     override fun getAIResponse(query: List<String>, isFistMessage: Boolean): String {
