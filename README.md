@@ -19,6 +19,40 @@ Spring AI 프레임워크를 이용해 OpenAI, Weaviate 를 연동하였습니�
 - Redis(Embed)
 - springdoc 2.2.0
 
+# Usage
+### 전체 대화 내용 조회
+endpoint : /v1/openai/request-question
+
+response : 
+
+{
+"errorCode": "Success",
+"data": "정보 전송 요구 연장은 고객이 지정한 개인신용정보 전송요구 기간 만료 1개월 전부터 요청할 수 있습니다. 따라서 개인신용정보 전송요구 기간이 만료되기 전에 마이데이터사업자를 통해 연장 요청을 할 수 있습니다.",
+"message": null
+}
+
+### 질의 응답
+endpoint : /v1/openai/conversation/all/user1
+
+response :
+
+{
+"errorCode": "Success",
+"data": [
+{
+"id": "66c16c1162b4e730364f26bd",
+"userId": "user1",
+"roomId": "1",
+"conversationList": [
+{
+"question": "API 스펙 중 aNS는 어떤 것을 뜻하나요?",
+"response": "\"aNS\"는 \"aNS (1000)\"로 표시된 부분에서 타입과 길이가 함께 명시된 것으로 보아, 길이가 1000인 문자열 데이터 형식을 나타내는 것으로 해석됩니다. 따라서, \"aNS\"는 1000 길이의 문자열 데이터 형식을 나타내며, \"a\"는 문자열 데이터를 의미하는 것으로 추정됩니다.",
+"createTime": "2024-08-18T03:35:45.083Z"
+}
+]
+},
+"message": null
+}
 
 # 상세 내용
 ### 패키지 구조
@@ -53,7 +87,7 @@ Hexagonal architecture 에 따라 Adaptor Application Domain 로 패키지 구�
 
 위 구조로 구성되어 있습니다.
 
-### 기능 명세
+### 기능 설명
 호출 받는 프로토콜이 달라질 수도 있고 캐싱 혹은 전체 대화를 저장할 DB, VectorDB 가 달라질 수 있기 때문에 계층간 분리가 명확한 Hexagonal을 선택하였습니다.
 
 PDF 정보를 weaviate에 업로드 한 방식은 먼저 PDF를 MarkDown 형식으로 데이터를 추출하고 '##'이나 '###' 같은
