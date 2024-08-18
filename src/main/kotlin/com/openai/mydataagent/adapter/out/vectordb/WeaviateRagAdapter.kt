@@ -14,9 +14,13 @@ import org.springframework.stereotype.Repository
  * @constructor Create empty Weaviate rag adapter
  */
 @Repository
-class WeaviateRagAdapter(private val vectorStore: WeaviateVectorStore) : RagPort{
+class WeaviateRagAdapter(private val vectorStore: WeaviateVectorStore) : RagPort {
     override fun searchSimilarVectors(query: String): List<String> {
-        return vectorStore.similaritySearch(SearchRequest.query(query).withTopK(7)).map {
+        val threshold = 0.7  // 임계값 설정
+        return vectorStore.similaritySearch(
+            SearchRequest.query(query)
+                .withSimilarityThreshold(threshold).withTopK(6)
+        ).map {
             it.content
         }
     }
@@ -30,7 +34,7 @@ class WeaviateRagAdapter(private val vectorStore: WeaviateVectorStore) : RagPort
             }
 
             vectorStore.add(documents)
-        } catch (e: Exception){
+        } catch (e: Exception) {
             throw e
         }
     }

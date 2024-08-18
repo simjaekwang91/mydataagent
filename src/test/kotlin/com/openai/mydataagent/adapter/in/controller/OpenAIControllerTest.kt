@@ -5,7 +5,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.openai.mydataagent.adapter.`in`.restapi.OpenAIController
 import com.openai.mydataagent.adapter.`in`.restapi.dto.ConversationHistoryResponseDto
-import com.openai.mydataagent.adapter.`in`.restapi.dto.ConversationResponseDto
 import com.openai.mydataagent.adapter.`in`.restapi.model.ErrorCodeEnum
 import com.openai.mydataagent.adapter.`in`.restapi.model.OpenAIResponse
 import com.openai.mydataagent.domain.QuestionDomainDto

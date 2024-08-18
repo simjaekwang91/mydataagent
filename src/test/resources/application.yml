@@ -11,7 +11,7 @@ spring:
       database: mydatabase
   ai:
     openai:
-      api-key: ${OPENAI_API_KEY}
+      api-key: sk-svcacct-85n-0-KfU17Tp4nkGi33YNbPhN8DrHVvAm-VBM0A8c-2MzT3BlbkFJliZ7-nAtcvkfbCQJmpH01omb5Io2c_Udh9e8pWtjm-0QoA
       chat:
         enabled: true
         options:
