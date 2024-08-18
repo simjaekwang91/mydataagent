@@ -5,10 +5,19 @@
 - 사용자는 질의 내용을 보내고 답변을 받아볼 수 있습니다.
 
 # 기술스택
+(Mongo, Redis의 경우 개발 확인용으로 Embed로 구성하여
+속도가 느리지만 운영시 실제 Mongo, Redis 를 연동하면 빠른 처리가
+가능할거로 생각됩니다.)
+
 Spring Boot 3.3.2 로 구성하였으며 Kotlin 으로 작성되었습니다.
+
 PDF 데이터를 올린 VectorDB 는 Weaviate로 구성하였습니다.
-전체 대화 내용을 저장하기 위해 Mongo(embed)를 통해 구성했고
+
+전체 대화 내용을 저장하기 위해 Mongo(embed)를 통해 구성하였습니다.전체 대화 내역의 경우 비정형적이고, 복잡한 관계는 없기에
+RDBMS 보다 빠른 읽기 쓰기에 강점이 있는 MongoDB를 선택하였습니다.
+
 최근 10개 대화를 캐싱하기 위해 Redis(Embed)를 통해 구성하였습니다.
+
 Spring AI 프레임워크를 이용해 OpenAI, Weaviate 를 연동하였습니다.
 - Spring Boot 3.3.2
 - Spring AI 1.0.0-SNAPSHOT
@@ -96,6 +105,7 @@ Hexagonal architecture 에 따라 Adaptor Application Domain 로 패키지 구�
 위 구조로 구성되어 있습니다.
 
 ### 기능 설명
+
 호출 받는 프로토콜이 달라질 수도 있고 캐싱 혹은 전체 대화를 저장할 DB, VectorDB 가 달라질 수 있기 때문에 계층간 분리가 명확한 Hexagonal을 선택하였습니다.
 
 PDF 정보를 weaviate에 업로드 한 방식은 먼저 PDF를 MarkDown 형식으로 데이터를 추출하고 '##'이나 '###' 같은
