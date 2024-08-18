@@ -100,7 +100,7 @@ class QuestionServiceTest {
         assertNotNull(result)
         assertTrue(result.any { it.contains("마이데이터") })
         assertTrue(result.any { it.contains("[참고 데이터] Test1") })
-        assertTrue(result.any { it.contains("[이전 대화 내용] question2") })
+        assertTrue(result.any { it.contains("[이전 대화 내용] 질문:question2 답변:answer2") })
     }
 
     @ParameterizedTest
